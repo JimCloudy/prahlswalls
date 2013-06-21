@@ -26,23 +26,29 @@ class Contact extends CI_Controller{
 			$this->index();
 		}
 		else{
-			$fname = explode('.',$_FILES['image']['name']);
-			$config = array(
-			'upload_path'=>'./public/images/tmp/',
-			'allowed_types'=>'gif|jpg|png',
-			'file_name'=>"yep.$fname[1]"
-			);
-			$this->load->library('upload',$config);
-			if(! $this->upload->do_upload('image')){
-				$error = array('error' => $this->upload->display_errors());
-				$this->load->view('contact/failure',$error);
+			if($_FILES['image']['size']>0){
+				$fname = explode('.',$_FILES['image']['name']);
+				$image = now().".$fname[1]";
+
+				$config = array(
+					'upload_path'=>'./public/images/tmp/',
+					'allowed_types'=>'gif|jpg|png',
+					'file_name'=>$image
+				);
+				$this->load->library('upload',$config);
+				if(! $this->upload->do_upload('image')){
+					$error = array('error' => $this->upload->display_errors());
+					$this->load->view('contact/failure',$error);
+				}
+
 			}
 			else{
-				$this->contacts_model->set_contacts();
-				$this->load->view('templates/header',$data);
-				$this->load->view('contact/success',$data);
-				$this->load->view('templates/footer');
+				$image='';
 			}
+			$this->contacts_model->set_contacts($image);
+			$this->load->view('templates/header',$data);
+			$this->load->view('contact/success',$data);
+			$this->load->view('templates/footer');
 		}
 	}
 }
