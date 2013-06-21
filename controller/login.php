@@ -1,6 +1,6 @@
 
 <?php 
-session_start();
+
 class Login extends CI_Controller {
 
  function __construct()
@@ -8,14 +8,13 @@ class Login extends CI_Controller {
    parent::__construct();
    $this->load->helper('url');
    $this->load->library('form_validation');
-   $this->load->library('session');
    $this->load->helper('form');
    $this->load->model('contacts_model');
  }
 
  function index()
  {
-  if($this->session->userdata('logged_in')){
+  if($this->nativesession->get('logged_in')){
     $data['contacts']=$this->contacts_model->get_contacts();
     $data['title']='Brad';
     $this->load->view('templates/header',$data);
@@ -42,9 +41,14 @@ class Login extends CI_Controller {
     $sess_array=array(
       'username'=>'brad'
       );
-    $this->session->set_userdata('logged_in',$sess_array);
+    $this->nativesession->set('logged_in',$sess_array);
     redirect('brad', 'refresh');
   }
+ }
+
+ function logout(){
+  $this->nativesession->delete('logged_in');
+  redirect('home','refresh');
  } 
 }
 ?>
