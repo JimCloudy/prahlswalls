@@ -14,9 +14,15 @@ class Contacts_model extends CI_Model{
 		return $this->db->insert('contacts',$data);
 	}
 
-	public function get_contacts(){
-		$query=$this->db->get('contacts');
-		return $query->result_array();
+	public function get_contacts($id = FALSE){
+
+		if($id === FALSE){
+			$query=$this->db->get('contacts');
+			return $query->result_array();	
+		}
+
+		$query = $this->db->get_where('contacts',array('CID'=>$id));
+		return $query->row_array();
 	}
 
 }

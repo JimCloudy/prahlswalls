@@ -6,9 +6,8 @@ class Login extends CI_Controller {
  function __construct()
  {
    parent::__construct();
-   $this->load->helper('url');
-   $this->load->library('form_validation');
-   $this->load->helper('form');
+   $this->load->helper(array('url','form'));
+   $this->load->library(array('form_validation','email'));
    $this->load->model('contacts_model');
  }
 
@@ -27,6 +26,16 @@ class Login extends CI_Controller {
     $this->load->view('brad/index',$data);
     $this->load->view('templates/footer');
   }
+ }
+
+ function view($id){
+  $data['contact']=$this->contacts_model->get_contacts($id);
+
+  $data['title'] = 'Respond';
+
+  $this->load->view('templates/header',$data);
+  $this->load->view('brad/view',$data);
+  $this->load->view('templates/footer');
  }
 
  function verifyLogin(){
@@ -49,6 +58,18 @@ class Login extends CI_Controller {
  function logout(){
   $this->nativesession->delete('logged_in');
   redirect('home','refresh');
+ }
+
+ function send(){
+  $this->email->from('jimcloudy11@gmail.com', 'Jim Cloudy');
+  $this->email->to('jimcloudy11@gmail.com'); 
+  
+  $this->email->subject('Brad\'s Walls');
+  $this->email->message($this->input->post('body'));  
+
+  $this->email->send();
+
+  echo $this->email->print_debugger();
  } 
 }
 ?>
