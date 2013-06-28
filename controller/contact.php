@@ -11,6 +11,7 @@ class Contact extends CI_Controller{
 
 	public function index(){
 		$data['title']='Contact';
+		$data['styles'] = array();
 
 		$this->load->view('templates/header',$data);
 		$this->load->view('contact/index',$data);
