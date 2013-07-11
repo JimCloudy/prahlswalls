@@ -32,7 +32,7 @@ class Contact extends CI_Controller{
 				$image = now().".$fname[1]";
 
 				$config = array(
-					'upload_path'=>'./public/images/tmp/',
+					'upload_path'=>'./public/img/tmp/',
 					'allowed_types'=>'gif|jpg|png',
 					'file_name'=>$image
 				);
